@@ -11804,8 +11804,6 @@ div#notebook {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Load pickled data</span>
 <span class="kn">import</span> <span class="nn">pickle</span>
 
-<span class="c1"># TODO: Fill this in based on where you saved the training and testing data</span>
-
 <span class="n">training_file</span> <span class="o">=</span> <span class="s1">&#39;train.p&#39;</span>
 <span class="n">testing_file</span> <span class="o">=</span> <span class="s1">&#39;test.p&#39;</span>
 
@@ -11848,16 +11846,9 @@ div#notebook {
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">### Replace each question mark with the appropriate value.</span>
 
-<span class="c1"># TODO: Number of training examples</span>
 <span class="n">n_train</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
-
-<span class="c1"># TODO: Number of testing examples.</span>
 <span class="n">n_test</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="c1"># TODO: What&#39;s the shape of an traffic sign image?</span>
 <span class="n">image_shape</span> <span class="o">=</span> <span class="n">X_train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
-
-<span class="c1"># TODO: How many unique classes/labels there are in the dataset.</span>
 <span class="n">n_classes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of training examples =&quot;</span><span class="p">,</span> <span class="n">n_train</span><span class="p">)</span>
@@ -13406,7 +13397,25 @@ I did not generate additional data</p>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong>
-conv layer -&gt; conv layer -&gt; maxpool -&gt; relu -&gt; conv layer -&gt; conv layer -&gt; relu -&gt; maxpool -&gt; flatten -&gt; normal -&gt; relu -&gt; normal -&gt; relu</p>
+My model uses LeNet as a starting point, detailed architecture:</p>
+<ul>
+<li>Input layer (32x32x3)</li>
+<li>Conv layer (5x5x3 filter -&gt; 28x28x8 output)</li>
+<li>Conv layer (5x5x8 filter -&gt; 24x24x20 output)</li>
+<li>Activation layer (Sigmoid)</li>
+<li>Max pooling (2x2 max pooling -&gt; 12x12x20 output)</li>
+<li>Conv layer (3x3x20 filter -&gt; 10x10x40 output)</li>
+<li>Conv layer (3x3x40 filter -&gt; 8x8x80 output)</li>
+<li>Activation layer (Sigmoid)</li>
+<li>Max pooling (2x2 max pooling -&gt; 4x4x80 output)</li>
+<li>Flatten layer (1280 output)</li>
+<li>Fully connected layer (1280 -&gt; 400)</li>
+<li>Activation layer (Sigmoid)</li>
+<li>Fully connected layer (400 -&gt; 128)</li>
+<li>Activation layer (Sigmoid)</li>
+<li>Fully connected layer (128 -&gt; 43)</li>
+<li>Output (43 logits)</li>
+</ul>
 
 </div>
 </div>
@@ -14172,8 +14181,64 @@ a = np.array([[ 0.24879643,  0.07032244,  0.12641572,  0.34763842,  0.07893497,
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Answer:</strong>
-Only the correct prediction (Stop Sign, index 3) has 99.7% certainty. The largest certainty for the rest of the images is 50.5%.</p>
+<p><strong>Answer:</strong></p>
+<h3 id="Summary:">Summary:<a class="anchor-link" href="#Summary:">&#182;</a></h3><p>Note that I'm using U.S. Traffic signs. Only the correct prediction (Stop Sign, index 3) has 99.7% certainty. The largest certainty for the rest of the images is 50.5%.</p>
+<h3 id="Detailed-discussion:">Detailed discussion:<a class="anchor-link" href="#Detailed-discussion:">&#182;</a></h3><h4 id="No-U-Turn">No U-Turn<a class="anchor-link" href="#No-U-Turn">&#182;</a></h4><p>Top 5 predictions:</p>
+<ol>
+<li>Ahead Only (50.0%)</li>
+<li>Dangerous curve to the left (12.0%)</li>
+<li>Go straight or right (7.6%)</li>
+<li>No passing for vehicles over 3.5 metric tons (7.2%)</li>
+<li>Vehicles over 3.5 metric tons prohibited (5.7%)</li>
+</ol>
+<p>Actually there is not an exact match for the No-U-Turn sign in the german traffic signs dataset.</p>
+<h4 id="Traffic-Light">Traffic Light<a class="anchor-link" href="#Traffic-Light">&#182;</a></h4><p>Top 5 predictions:
+11, 42, 20, 10, 35
+3.22694957e-01,   2.07814112e-01,   1.56397119e-01,
+          9.98148620e-02,   6.62139654e-02</p>
+<ol>
+<li>Right-of-way at the next intersection (32.3%)</li>
+<li>End of no passing by vehicles over 3.5 metric tons (20.8%)</li>
+<li>Dangerous curve to the right (15.6%)</li>
+<li>No passing for vehicles over 3.5 metric tons (10.0%)</li>
+<li>Ahead only (6.6%)</li>
+</ol>
+<p>Correct label is "Traffic signals" but it does not appear in the predictions.</p>
+<h4 id="Speed-Limit-70">Speed Limit 70<a class="anchor-link" href="#Speed-Limit-70">&#182;</a></h4><p>Top 5 predictions:
+34, 35, 36, 17,  6
+5.05098104e-01,   1.50730804e-01,   7.37400502e-02,
+          4.69008200e-02,   3.87793630e-02</p>
+<ol>
+<li>Turn left ahead (50.5%)</li>
+<li>Ahead only (15.1%)</li>
+<li>Go straight or right (7.4%)</li>
+<li>No vehicles (4.7%)</li>
+<li>End of speed limit (80km/h) (3.9%)</li>
+</ol>
+<p>The closest equivalent would be "Speed limit (70km/h)" but it does not appear in the predictions, probably because the German speed limit sign has different appearance as in US (red vs white, round vs square).</p>
+<h4 id="Stop-Sign">Stop Sign<a class="anchor-link" href="#Stop-Sign">&#182;</a></h4><p>Top 5 predictions:
+14,  5, 29, 17, 15
+9.97188628e-01,   8.22552713e-04,   4.84816206e-04,
+          3.10438947e-04,   1.97196059e-04</p>
+<ol>
+<li><strong>Stop (99.7%)</strong></li>
+<li>Speed limit (80km/h) (0.08%)</li>
+<li>Bicycles crossing (0.04%)</li>
+<li>No entry (0.03%)</li>
+<li>No vehicles (0.02%)</li>
+</ol>
+<p>The German stop sign looks just like the U.S. ones.</p>
+<h4 id="Yield-Sign">Yield Sign<a class="anchor-link" href="#Yield-Sign">&#182;</a></h4><p>10, 12, 30, 11, 13
+2.84999609e-01,   2.28536621e-01,   1.42926142e-01,
+          1.27649054e-01,   1.04898922e-01</p>
+<ol>
+<li>No passing for vehicles over 3.5 metric tons (28.5%)</li>
+<li>Priority road (22.9%)</li>
+<li>Beware of ice/snow (14.3%)</li>
+<li>Right-of-way at the next intersection (12.8%)</li>
+<li><strong>Yield (10.5%)</strong></li>
+</ol>
+<p>The German yield sign looks similar to the U.S. ones (same shape and color), but U.S. ones have "Yield" as text inside. This could perhaps explain why it appears in the 5th place of the predictions but not at the top.</p>
 
 </div>
 </div>
